@@ -1,0 +1,180 @@
+/* Enterprise CRM Custom Styles */
+
+html {
+    scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #94a3b8;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-400 { animation-delay: 400ms; }
+.animate-delay-500 { animation-delay: 500ms; }
+
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+
+.progress-ring__circle {
+    transition: stroke-dashoffset 0.35s;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+.table-row-animate {
+    animation: slideUp 0.3s ease-out forwards;
+    opacity: 0;
+}
+
+.search-input:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
+}
+
+.stat-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.stat-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+    animation: pulse-slow 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+.loading-shimmer {
+    background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+
+.pipeline-column {
+    min-height: 200px;
+    transition: background-color 0.2s ease;
+}
+
+.pipeline-column.drag-over {
+    background-color: rgba(59, 130, 246, 0.08);
+    border-color: #3b82f6;
+}
+
+.deal-card {
+    cursor: grab;
+    transition: all 0.2s ease;
+}
+
+.deal-card:active {
+    cursor: grabbing;
+}
+
+.deal-card:hover {
+    transform: scale(1.02);
+}
+
+/* Custom Video Player */
+.custom-video-player {
+    position: relative;
+    background: #000;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+}
+
+.custom-video-player video {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.custom-video-player video::-webkit-media-controls-panel {
+    background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+}
+
+.custom-video-player video::-webkit-media-controls-play-button,
+.custom-video-player video::-webkit-media-controls-volume-slider,
+.custom-video-player video::-webkit-media-controls-timeline {
+    filter: brightness(1.2);
+}
+
+/* Upload drop zone active state */
+#drop-zone.drag-over {
+    border-color: #3b82f6;
+    background-color: #eff6ff;
+}
+
+/* Security badge */
+.security-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    background: #dcfce7;
+    color: #166534;
+}
+
+.security-badge.warning {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.security-badge.danger {
+    background: #fee2e2;
+    color: #991b1b;
+}

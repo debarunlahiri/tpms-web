@@ -1,0 +1,38 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Logs
+*.log
+logs/
+
+# Cache
+*.cache
+cache/
+
+# Dependencies (if using composer in future)
+/vendor/
+composer.lock
+
+# Uploaded files
+/uploads/
+/assets/uploads/
+
+# Session files (if file-based)
+/sessions/
