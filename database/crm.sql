@@ -43,6 +43,19 @@ CREATE TABLE IF NOT EXISTS remember_tokens (
     INDEX idx_remember_expiry (expires_at)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS password_reset_tokens (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    selector CHAR(24) NOT NULL UNIQUE,
+    token_hash CHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    used_at DATETIME DEFAULT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    INDEX idx_password_reset_user (user_id),
+    INDEX idx_password_reset_expiry (expires_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE IF NOT EXISTS notifications (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -272,5 +285,5 @@ INSERT INTO settings (setting_key, setting_value) VALUES
 ('invoice_next_number', '1001'),
 ('invoice_tax_rate', '0'),
 ('invoice_gst_rate', '18'),
-('invoice_terms', 'Payment is due within 15 days. Thank you for your business.')
+('invoice_terms', '')
 ON DUPLICATE KEY UPDATE setting_key=setting_key;

@@ -57,7 +57,7 @@ try {
         ('invoice_next_number', '1001'),
         ('invoice_tax_rate', '0'),
         ('invoice_gst_rate', '18'),
-        ('invoice_terms', 'Payment is due within 15 days. Thank you for your business.')
+        ('invoice_terms', '')
         ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
 } catch (Exception $e) {
     $error = 'Migration error: ' . $e->getMessage();

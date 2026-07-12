@@ -18,11 +18,8 @@ try {
     <button id="sidebar-toggle" class="p-2 rounded-lg hover:bg-gray-100 transition-colors">
         <i class="fas fa-bars text-gray-600 text-xl"></i>
     </button>
-    <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center">
-            <i class="fas fa-bolt text-white text-sm"></i>
-        </div>
-        <span class="font-bold text-secondary-900">TPMS</span>
+    <div class="h-9 w-24 rounded-md bg-white overflow-hidden flex items-center justify-center px-2">
+        <img src="assets/images/logo.png" alt="TPMS" class="w-full h-full object-cover scale-[1.3]">
     </div>
     <a href="notifications.php" class="relative w-9 h-9 rounded-lg bg-gray-50 flex items-center justify-center text-gray-600" aria-label="Notifications">
         <i class="fas fa-bell"></i>

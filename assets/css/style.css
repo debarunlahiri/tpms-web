@@ -178,3 +178,17 @@ html {
     background: #fee2e2;
     color: #991b1b;
 }
+
+/* Keep the wide TPMS wordmark clear of auth-card edges. */
+main > .text-center > .w-36 {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+main > .text-center > .w-36 img[alt="TPMS"] {
+    transform: scale(1.05) !important;
+}
+
+main > .text-center > .w-36 {
+    animation: none !important;
+}

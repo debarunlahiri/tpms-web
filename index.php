@@ -35,6 +35,7 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied' && !$flash) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | TPMS</title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -83,8 +84,8 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied' && !$flash) {
     <div class="relative z-10 w-full max-w-md px-6">
         <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl border border-white/20 p-8 animate-slide-up">
             <div class="text-center mb-8">
-                <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg mb-4 animate-pulse-slow">
-                    <i class="fas fa-bolt text-white text-2xl"></i>
+                <div class="w-36 h-16 mx-auto rounded-xl bg-white overflow-hidden flex items-center justify-center px-3 shadow-lg mb-4">
+                    <img src="assets/images/logo.png" alt="TPMS" class="w-full h-full object-cover scale-[1.25]">
                 </div>
                 <h1 class="text-2xl font-bold text-white mb-1">Welcome Back</h1>
                 <p class="text-gray-400 text-sm">Sign in to access TPMS</p>
@@ -119,7 +120,7 @@ if (isset($_GET['error']) && $_GET['error'] === 'access_denied' && !$flash) {
                         <input type="checkbox" name="remember_me" value="1" class="mr-2 rounded border-white/20 bg-white/5 text-primary-600 focus:ring-primary-500">
                         Remember me
                     </label>
-                    <a href="#" class="text-white hover:text-gray-200 transition-colors">Forgot password?</a>
+                    <a href="forgot_password.php" class="text-white hover:text-gray-200 transition-colors">Forgot password?</a>
                 </div>
 
                 <button type="submit" 

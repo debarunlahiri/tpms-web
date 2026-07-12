@@ -39,13 +39,20 @@ $isEmbedded = isset($_GET['embedded']) && $_GET['embedded'] == '1';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice <?php echo sanitize($invoice['invoice_number']); ?></title>
+    <link rel="icon" type="image/png" href="assets/images/logo.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @media print {
+            @page { margin: 12mm; }
             .no-print { display: none !important; }
-            body { background: white; }
-            .print-container { box-shadow: none; border: none; margin: 0; padding: 0; }
+            html, body { background: white !important; margin: 0 !important; padding: 0 !important; }
+            body > div { max-width: none !important; margin: 0 !important; }
+            .print-container { background: white !important; box-shadow: none !important; border: 0 !important; border-radius: 0 !important; margin: 0 !important; padding: 0 !important; }
+            .print-container [class*="bg-"] { background: transparent !important; }
+            .print-container * { box-shadow: none !important; text-shadow: none !important; }
+            .print-container table thead tr { background: transparent !important; border-bottom: 1px solid #d1d5db; }
+            .print-container .rounded-full { background: transparent !important; padding: 0 !important; }
         }
     </style>
 </head>
@@ -53,7 +60,7 @@ $isEmbedded = isset($_GET['embedded']) && $_GET['embedded'] == '1';
     <div class="max-w-4xl mx-auto">
         <!-- Toolbar -->
         <div class="no-print flex justify-end gap-2 mb-4">
-            <button onclick="window.print()" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"><i class="fas fa-print mr-2"></i>Print</button>
+            <button onclick="window.print()" class="px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg hover:bg-gray-50 transition-colors"><i class="fas fa-print mr-2 text-gray-900"></i>Print</button>
             <a href="invoices.php?action=view&id=<?php echo $invoice['id']; ?>" class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">Back</a>
         </div>
 
@@ -62,7 +69,8 @@ $isEmbedded = isset($_GET['embedded']) && $_GET['embedded'] == '1';
             <!-- Header -->
             <div class="flex flex-col md:flex-row justify-between items-start mb-10">
                 <div>
-                    <h1 class="text-3xl font-bold text-secondary-900"><?php echo sanitize($companyName); ?></h1>
+                    <img src="assets/images/logo.png" alt="TPMS" class="w-36 h-14 object-cover mb-3">
+                    <?php if (strcasecmp(trim($companyName), 'TPMS') !== 0): ?><h1 class="text-3xl font-bold text-secondary-900"><?php echo sanitize($companyName); ?></h1><?php endif; ?>
                     <?php if ($companyAddress): ?><p class="text-sm text-gray-600 mt-1 whitespace-pre-line"><?php echo sanitize($companyAddress); ?></p><?php endif; ?>
                     <?php if ($companyEmail): ?><p class="text-sm text-gray-600"><i class="fas fa-envelope mr-1"></i><?php echo sanitize($companyEmail); ?></p><?php endif; ?>
                     <?php if ($companyPhone): ?><p class="text-sm text-gray-600"><i class="fas fa-phone mr-1"></i><?php echo sanitize($companyPhone); ?></p><?php endif; ?>
@@ -70,7 +78,7 @@ $isEmbedded = isset($_GET['embedded']) && $_GET['embedded'] == '1';
                 </div>
                 <div class="mt-6 md:mt-0 text-left md:text-right">
                     <h2 class="text-2xl font-bold text-primary-600">INVOICE</h2>
-                    <p class="text-lg font-semibold text-secondary-900 mt-1"><?php echo sanitize($invoice['invoice_number']); ?></p>
+                    <p class="text-lg font-semibold text-gray-900 mt-1"><?php echo sanitize($invoice['invoice_number']); ?></p>
                     <p class="text-sm text-gray-600 mt-1">Status: <span class="px-2 py-0.5 text-xs rounded-full <?php echo statusColor($invoice['status']); ?>"><?php echo $statuses[$invoice['status']] ?? ucfirst($invoice['status']); ?></span></p>
                 </div>
             </div>
@@ -91,10 +99,12 @@ $isEmbedded = isset($_GET['embedded']) && $_GET['embedded'] == '1';
                             <p class="text-sm text-gray-500">Issue Date</p>
                             <p class="font-medium"><?php echo formatDate($invoice['issue_date']); ?></p>
                         </div>
+                        <?php if (!empty($invoice['due_date'])): ?>
                         <div class="text-left md:text-right">
                             <p class="text-sm text-gray-500">Due Date</p>
-                            <p class="font-medium"><?php echo $invoice['due_date'] ? formatDate($invoice['due_date']) : '-'; ?></p>
+                            <p class="font-medium"><?php echo formatDate($invoice['due_date']); ?></p>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
             </div>

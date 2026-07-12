@@ -20,12 +20,9 @@ $menuItems = [
 <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 bg-secondary-900 text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300 z-40 shadow-2xl">
     <div class="h-full flex flex-col">
         <div class="p-6 border-b border-gray-700">
-            <a href="dashboard.php" class="flex items-center gap-3 hover:opacity-90 transition-opacity">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-primary-700 flex items-center justify-center shadow-lg">
-                    <i class="fas fa-bolt text-white text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg tracking-wide">TPMS</h1>
+            <a href="dashboard.php" class="block hover:opacity-90 transition-opacity" aria-label="TPMS Dashboard">
+                <div class="h-11 w-32 rounded-lg bg-white overflow-hidden flex items-center justify-center px-2">
+                    <img src="assets/images/logo.png" alt="TPMS" class="w-full h-full object-cover scale-[1.3]">
                 </div>
             </a>
         </div>
