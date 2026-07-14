@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TPMS - Helper Functions
  */
@@ -15,7 +16,7 @@ session_start();
 $GLOBALS['ALL_PERMISSIONS'] = [
     'dashboard' => 'View Dashboard',
     'leads' => 'Manage Leads',
-    'contacts' => 'Manage Contacts',
+    'contacts' => 'Manage Clients',
     'deals' => 'Manage Deals',
     'tasks' => 'Manage Tasks',
     'projects' => 'Manage Projects',
@@ -34,14 +35,16 @@ $GLOBALS['ALL_PERMISSIONS'] = [
 /**
  * Check if user is logged in
  */
-function isLoggedIn() {
+function isLoggedIn()
+{
     return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
 }
 
 /**
  * Require login, redirect to login if not authenticated
  */
-function requireLogin() {
+function requireLogin()
+{
     if (!isLoggedIn()) {
         header('Location: index.php');
         exit;
@@ -51,10 +54,11 @@ function requireLogin() {
 /**
  * Load role permissions into session
  */
-function loadUserPermissions($userId = null) {
+function loadUserPermissions($userId = null)
+{
     if ($userId === null) $userId = $_SESSION['user_id'] ?? null;
     if (!$userId) return [];
-    
+
     try {
         $db = getDB();
         $stmt = $db->prepare("SELECT r.permissions FROM users u JOIN roles r ON u.role = r.name WHERE u.id = ?");
@@ -73,7 +77,8 @@ function loadUserPermissions($userId = null) {
 /**
  * Check if current user has a permission
  */
-function hasPermission($permission) {
+function hasPermission($permission)
+{
     if (!isLoggedIn()) return false;
     if (!isset($_SESSION['user_permissions'])) {
         $_SESSION['user_permissions'] = loadUserPermissions();
@@ -84,21 +89,24 @@ function hasPermission($permission) {
 /**
  * Check if current user is admin
  */
-function isAdmin() {
+function isAdmin()
+{
     return isLoggedIn() && ($_SESSION['user_role'] === 'admin' || in_array('admin', $_SESSION['user_permissions'] ?? []));
 }
 
 /**
  * Check if user can view all records or only own records
  */
-function canViewAll() {
+function canViewAll()
+{
     return hasPermission('view_all') || isAdmin();
 }
 
 /**
  * Require specific permission
  */
-function requirePermission($permissions) {
+function requirePermission($permissions)
+{
     requireLogin();
     if (isAdmin()) return true;
     if (!is_array($permissions)) $permissions = [$permissions];
@@ -116,7 +124,8 @@ function requirePermission($permissions) {
  * Legacy role check (now uses permissions)
  * Kept for backward compatibility
  */
-function requireRole($roles) {
+function requireRole($roles)
+{
     requireLogin();
     if (!is_array($roles)) $roles = [$roles];
     if (!in_array($_SESSION['user_role'], $roles) && !isAdmin()) {
@@ -128,7 +137,8 @@ function requireRole($roles) {
 /**
  * Get current user
  */
-function currentUser() {
+function currentUser()
+{
     if (!isLoggedIn()) return null;
     return [
         'id' => $_SESSION['user_id'],
@@ -142,7 +152,8 @@ function currentUser() {
 /**
  * Sanitize input against XSS
  */
-function sanitize($input) {
+function sanitize($input)
+{
     if ($input === null) return '';
     return htmlspecialchars(trim((string)$input), ENT_QUOTES, 'UTF-8');
 }
@@ -150,21 +161,24 @@ function sanitize($input) {
 /**
  * Validate email
  */
-function isValidEmail($email) {
+function isValidEmail($email)
+{
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
 /**
  * Generate secure token
  */
-function generateToken($length = 32) {
+function generateToken($length = 32)
+{
     return bin2hex(random_bytes($length / 2));
 }
 
 /**
  * Generate a time-ordered RFC 9562 UUID version 7.
  */
-function uuidV7() {
+function uuidV7()
+{
     $timestamp = (int) floor(microtime(true) * 1000);
     $hex = str_pad(dechex($timestamp), 12, '0', STR_PAD_LEFT) . bin2hex(random_bytes(10));
     $hex[12] = '7';
@@ -173,12 +187,14 @@ function uuidV7() {
     return substr($hex, 0, 8) . '-' . substr($hex, 8, 4) . '-' . substr($hex, 12, 4) . '-' . substr($hex, 16, 4) . '-' . substr($hex, 20, 12);
 }
 
-function ensureNotificationsTable($db = null) {
+function ensureNotificationsTable($db = null)
+{
     $db = $db ?: getDB();
     $db->exec("CREATE TABLE IF NOT EXISTS notifications (id BIGINT AUTO_INCREMENT PRIMARY KEY, user_id INT NOT NULL, title VARCHAR(150) NOT NULL, message TEXT NOT NULL, type VARCHAR(30) DEFAULT 'info', url VARCHAR(500) DEFAULT NULL, read_at DATETIME DEFAULT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE, INDEX idx_notification_user_read (user_id, read_at), INDEX idx_notification_created (created_at)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 }
 
-function createNotification($userId, $title, $message, $type = 'info', $url = null) {
+function createNotification($userId, $title, $message, $type = 'info', $url = null)
+{
     if (!$userId) return false;
     try {
         $db = getDB();
@@ -193,7 +209,8 @@ function createNotification($userId, $title, $message, $type = 'info', $url = nu
 /**
  * Rate limit check
  */
-function checkRateLimit($key, $maxAttempts = 10, $window = 60) {
+function checkRateLimit($key, $maxAttempts = 10, $window = 60)
+{
     $sessionKey = 'rate_' . $key;
     if (!isset($_SESSION[$sessionKey])) {
         $_SESSION[$sessionKey] = ['count' => 0, 'time' => time()];
@@ -208,7 +225,8 @@ function checkRateLimit($key, $maxAttempts = 10, $window = 60) {
 /**
  * Redirect with message
  */
-function redirect($url, $message = '', $type = 'info') {
+function redirect($url, $message = '', $type = 'info')
+{
     if ($message) {
         $_SESSION['flash'] = ['message' => $message, 'type' => $type];
     }
@@ -219,7 +237,8 @@ function redirect($url, $message = '', $type = 'info') {
 /**
  * Show flash message
  */
-function flash() {
+function flash()
+{
     if (isset($_SESSION['flash'])) {
         $flash = $_SESSION['flash'];
         unset($_SESSION['flash']);
@@ -231,7 +250,8 @@ function flash() {
 /**
  * Format date
  */
-function formatDate($date, $format = null) {
+function formatDate($date, $format = null)
+{
     if (!$date) return '-';
     if (!$format) $format = setting('date_format', 'Y-m-d');
     return date($format, strtotime($date));
@@ -240,7 +260,8 @@ function formatDate($date, $format = null) {
 /**
  * Get setting value
  */
-function setting($key, $default = '') {
+function setting($key, $default = '')
+{
     static $settings = null;
     if ($settings === null) {
         try {
@@ -257,7 +278,8 @@ function setting($key, $default = '') {
 /**
  * Log activity with IP and user agent
  */
-function logActivity($action, $description = '', $related_to = null, $related_id = null) {
+function logActivity($action, $description = '', $related_to = null, $related_id = null)
+{
     try {
         $db = getDB();
         $stmt = $db->prepare("INSERT INTO activities (user_id, action, description, related_to, related_id, ip_address, user_agent) VALUES (?, ?, ?, ?, ?, ?, ?)");
@@ -278,7 +300,8 @@ function logActivity($action, $description = '', $related_to = null, $related_id
 /**
  * Log page view
  */
-function logPageView($page) {
+function logPageView($page)
+{
     if (isLoggedIn()) {
         logActivity('page_view', "Viewed page: $page");
     }
@@ -287,7 +310,8 @@ function logPageView($page) {
 /**
  * Format bytes to human readable
  */
-function formatBytes($bytes, $precision = 2) {
+function formatBytes($bytes, $precision = 2)
+{
     $units = ['B', 'KB', 'MB', 'GB', 'TB'];
     $bytes = max($bytes, 0);
     $pow = floor(($bytes ? log($bytes) : 0) / log(1024));
@@ -299,7 +323,8 @@ function formatBytes($bytes, $precision = 2) {
 /**
  * Format currency with conversion
  */
-function formatCurrency($amount, $convert = true) {
+function formatCurrency($amount, $convert = true)
+{
     $currency = setting('currency', '₹');
     $rate = floatval(setting('currency_conversion_rate', '1'));
     if ($convert && $rate > 0) {
@@ -311,7 +336,8 @@ function formatCurrency($amount, $convert = true) {
 /**
  * Convert amount to base currency
  */
-function convertCurrency($amount) {
+function convertCurrency($amount)
+{
     $rate = floatval(setting('currency_conversion_rate', '1'));
     if ($rate > 0) {
         return (float)$amount * $rate;
@@ -322,7 +348,8 @@ function convertCurrency($amount) {
 /**
  * Get status badge color
  */
-function statusColor($status) {
+function statusColor($status)
+{
     $colors = [
         'new' => 'bg-blue-100 text-blue-800',
         'contacted' => 'bg-indigo-100 text-indigo-800',
@@ -352,7 +379,8 @@ function statusColor($status) {
 /**
  * Get initials from name
  */
-function getInitials($name) {
+function getInitials($name)
+{
     $parts = explode(' ', trim($name));
     $initials = '';
     foreach ($parts as $part) {
@@ -365,7 +393,8 @@ function getInitials($name) {
 /**
  * Generate CSRF token
  */
-function csrfToken() {
+function csrfToken()
+{
     if (empty($_SESSION['csrf_token'])) {
         $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
     }
@@ -375,14 +404,16 @@ function csrfToken() {
 /**
  * Verify CSRF token
  */
-function verifyCsrf($token) {
+function verifyCsrf($token)
+{
     return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 
 /**
  * Pagination helper
  */
-function paginate($page, $perPage, $total) {
+function paginate($page, $perPage, $total)
+{
     $page = max(1, (int)$page);
     $perPage = max(1, (int)$perPage);
     $totalPages = max(1, ceil($total / $perPage));

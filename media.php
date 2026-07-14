@@ -26,7 +26,7 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
         $stmt = $db->prepare("SELECT * FROM media WHERE id=? " . ($viewAll ? '' : 'AND uploaded_by=?'));
         $stmt->execute($viewAll ? [$id] : [$id, $userId]);
         $media = $stmt->fetch();
-        
+
         if ($media) {
             $filePath = __DIR__ . '/' . $media['file_path'];
             if (file_exists($filePath)) {
@@ -53,7 +53,7 @@ include 'includes/sidebar.php';
 
 <div class="lg:ml-64 min-h-screen transition-all duration-300">
     <?php include 'includes/topbar.php'; ?>
-    
+
     <main class="p-6 pt-20">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 animate-fade-in">
             <div>
@@ -68,11 +68,11 @@ include 'includes/sidebar.php';
         </div>
 
         <?php if ($error): ?>
-        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 animate-fade-in"><i class="fas fa-exclamation-circle mr-2"></i><?php echo sanitize($error); ?></div>
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 animate-fade-in"><i class="fas fa-exclamation-circle mr-2"></i><?php echo sanitize($error); ?></div>
         <?php endif; ?>
 
         <?php if ($success): ?>
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 animate-fade-in"><i class="fas fa-check-circle mr-2"></i><?php echo sanitize($success); ?></div>
+            <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 animate-fade-in"><i class="fas fa-check-circle mr-2"></i><?php echo sanitize($success); ?></div>
         <?php endif; ?>
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -104,39 +104,39 @@ include 'includes/sidebar.php';
                     <button onclick="openUploadModal()" class="mt-4 text-primary-600 hover:underline font-medium">Upload your first file</button>
                 </div>
             <?php else: ?>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                <?php foreach ($media as $item): ?>
-                <div class="group bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
-                    <div class="aspect-video bg-gray-200 relative overflow-hidden cursor-pointer" onclick="openMediaViewer(<?php echo $item['id']; ?>)">
-                        <?php if ($item['file_type'] === 'image'): ?>
-                        <img src="<?php echo sanitize($item['file_path']); ?>" alt="<?php echo sanitize($item['original_name']); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                        <?php elseif ($item['file_type'] === 'video'): ?>
-                        <div class="w-full h-full flex items-center justify-center bg-gray-800">
-                            <i class="fas fa-play-circle text-white text-5xl opacity-80"></i>
-                        </div>
-                        <?php else: ?>
-                        <div class="w-full h-full flex items-center justify-center bg-slate-100">
-                            <i class="fas fa-file-alt text-slate-500 text-5xl"></i>
-                        </div>
-                        <?php endif; ?>
-                        <div class="absolute top-2 right-2 px-2 py-1 text-xs rounded-full bg-black/60 text-white">
-                            <?php echo strtoupper(pathinfo($item['original_name'], PATHINFO_EXTENSION)); ?>
-                        </div>
-                    </div>
-                    <div class="p-4">
-                        <p class="font-medium text-secondary-900 truncate" title="<?php echo sanitize($item['original_name']); ?>"><?php echo sanitize($item['original_name']); ?></p>
-                        <p class="text-xs text-gray-500 mb-2"><?php echo formatBytes($item['file_size']); ?> &bull; <?php echo sanitize($item['uploader_name'] ?? 'Unknown'); ?></p>
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs text-gray-400"><?php echo formatDate($item['created_at']); ?></span>
-                            <div class="flex gap-1">
-                                <a href="<?php echo sanitize($item['file_path']); ?>" download class="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition-colors" title="Download"><i class="fas fa-download text-xs"></i></a>
-                                <a href="media.php?delete=<?php echo $item['id']; ?>" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" data-confirm="Delete this media file?" title="Delete"><i class="fas fa-trash text-xs"></i></a>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <?php foreach ($media as $item): ?>
+                        <div class="group bg-gray-50 rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300">
+                            <div class="aspect-video bg-gray-200 relative overflow-hidden cursor-pointer" onclick="openMediaViewer(<?php echo $item['id']; ?>)">
+                                <?php if ($item['file_type'] === 'image'): ?>
+                                    <img src="<?php echo sanitize($item['file_path']); ?>" alt="<?php echo sanitize($item['original_name']); ?>" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <?php elseif ($item['file_type'] === 'video'): ?>
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-800">
+                                        <i class="fas fa-play-circle text-white text-5xl opacity-80"></i>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="w-full h-full flex items-center justify-center bg-slate-100">
+                                        <i class="fas fa-file-alt text-slate-500 text-5xl"></i>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="absolute top-2 right-2 px-2 py-1 text-xs rounded-full bg-black/60 text-white">
+                                    <?php echo strtoupper(pathinfo($item['original_name'], PATHINFO_EXTENSION)); ?>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <p class="font-medium text-secondary-900 truncate" title="<?php echo sanitize($item['original_name']); ?>"><?php echo sanitize($item['original_name']); ?></p>
+                                <p class="text-xs text-gray-500 mb-2"><?php echo formatBytes($item['file_size']); ?> &bull; <?php echo sanitize($item['uploader_name'] ?? 'Unknown'); ?></p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-gray-400"><?php echo formatDate($item['created_at']); ?></span>
+                                    <div class="flex gap-1">
+                                        <a href="<?php echo sanitize($item['file_path']); ?>" download class="p-1.5 text-gray-600 hover:bg-gray-200 rounded transition-colors" title="Download"><i class="fas fa-download text-xs"></i></a>
+                                        <a href="media.php?delete=<?php echo $item['id']; ?>" class="p-1.5 text-red-600 hover:bg-red-50 rounded transition-colors" data-confirm="Delete this media file?" title="Delete"><i class="fas fa-trash text-xs"></i></a>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <?php endforeach; ?>
                 </div>
-                <?php endforeach; ?>
-            </div>
             <?php endif; ?>
         </div>
     </main>
@@ -195,165 +195,165 @@ include 'includes/sidebar.php';
 </div>
 
 <script>
-const mediaFiles = <?php echo json_encode($media); ?>;
-const mediaTargets = {
-    task: <?php echo json_encode($tasks); ?>,
-    project: <?php echo json_encode($projects); ?>
-};
+    const mediaFiles = <?php echo json_encode($media); ?>;
+    const mediaTargets = {
+        task: <?php echo json_encode($tasks); ?>,
+        project: <?php echo json_encode($projects); ?>
+    };
 
-function updateMediaTargets() {
-    const relatedTo = document.getElementById('media-related-to').value;
-    const wrap = document.getElementById('media-target-wrap');
-    const select = document.getElementById('media-related-id');
-    if (relatedTo === 'general') {
-        wrap.classList.add('hidden');
-        select.innerHTML = '';
-        return;
+    function updateMediaTargets() {
+        const relatedTo = document.getElementById('media-related-to').value;
+        const wrap = document.getElementById('media-target-wrap');
+        const select = document.getElementById('media-related-id');
+        if (relatedTo === 'general') {
+            wrap.classList.add('hidden');
+            select.innerHTML = '';
+            return;
+        }
+        wrap.classList.remove('hidden');
+        const records = mediaTargets[relatedTo] || [];
+        select.innerHTML = records.length ?
+            records.map(record => `<option value="${record.id}">${record.title}</option>`).join('') :
+            '<option value="">No available records</option>';
     }
-    wrap.classList.remove('hidden');
-    const records = mediaTargets[relatedTo] || [];
-    select.innerHTML = records.length
-        ? records.map(record => `<option value="${record.id}">${record.title}</option>`).join('')
-        : '<option value="">No available records</option>';
-}
 
-function openUploadModal() {
-    const modal = document.getElementById('upload-modal');
-    modal.classList.remove('hidden');
-    requestAnimationFrame(() => {
-        modal.querySelector('.upload-backdrop').classList.remove('opacity-0');
-        modal.querySelector('.upload-panel').classList.remove('opacity-0', 'scale-95');
-        modal.querySelector('.upload-panel').classList.add('opacity-100', 'scale-100');
-    });
-}
+    function openUploadModal() {
+        const modal = document.getElementById('upload-modal');
+        modal.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            modal.querySelector('.upload-backdrop').classList.remove('opacity-0');
+            modal.querySelector('.upload-panel').classList.remove('opacity-0', 'scale-95');
+            modal.querySelector('.upload-panel').classList.add('opacity-100', 'scale-100');
+        });
+    }
 
-function closeUploadModal() {
-    const modal = document.getElementById('upload-modal');
-    modal.querySelector('.upload-backdrop').classList.add('opacity-0');
-    modal.querySelector('.upload-panel').classList.remove('opacity-100', 'scale-100');
-    modal.querySelector('.upload-panel').classList.add('opacity-0', 'scale-95');
-    setTimeout(() => modal.classList.add('hidden'), 200);
-}
+    function closeUploadModal() {
+        const modal = document.getElementById('upload-modal');
+        modal.querySelector('.upload-backdrop').classList.add('opacity-0');
+        modal.querySelector('.upload-panel').classList.remove('opacity-100', 'scale-100');
+        modal.querySelector('.upload-panel').classList.add('opacity-0', 'scale-95');
+        setTimeout(() => modal.classList.add('hidden'), 200);
+    }
 
-function openMediaViewer(id) {
-    const item = mediaFiles.find(m => m.id == id);
-    if (!item) return;
-    
-    const viewer = document.getElementById('media-viewer');
-    const content = document.getElementById('viewer-content');
-    
-    if (item.file_type === 'image') {
-        content.innerHTML = `<img src="${item.file_path}" alt="${item.original_name}" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">`;
-    } else if (item.file_type === 'video') {
-        content.innerHTML = `
+    function openMediaViewer(id) {
+        const item = mediaFiles.find(m => m.id == id);
+        if (!item) return;
+
+        const viewer = document.getElementById('media-viewer');
+        const content = document.getElementById('viewer-content');
+
+        if (item.file_type === 'image') {
+            content.innerHTML = `<img src="${item.file_path}" alt="${item.original_name}" class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">`;
+        } else if (item.file_type === 'video') {
+            content.innerHTML = `
             <div class="custom-video-player rounded-lg overflow-hidden shadow-2xl bg-black">
                 <video controls autoplay class="max-w-full max-h-[90vh]">
                     <source src="${item.file_path}" type="${item.mime_type}">
                     Your browser does not support the video tag.
                 </video>
             </div>`;
-    } else {
-        content.innerHTML = `<div class="bg-white rounded-xl p-8 text-center shadow-2xl"><i class="fas fa-file-alt text-6xl text-slate-400 mb-4"></i><p class="font-medium text-slate-800 mb-4">${item.original_name}</p><a href="${item.file_path}" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-white rounded-lg"><i class="fas fa-external-link-alt"></i> Open document</a></div>`;
-    }
-    
-    viewer.classList.remove('hidden');
-}
+        } else {
+            content.innerHTML = `<div class="bg-white rounded-xl p-8 text-center shadow-2xl"><i class="fas fa-file-alt text-6xl text-slate-400 mb-4"></i><p class="font-medium text-slate-800 mb-4">${item.original_name}</p><a href="${item.file_path}" target="_blank" rel="noopener" class="btn-primary inline-flex items-center gap-2 px-5 py-2.5 text-white rounded-lg"><i class="fas fa-external-link-alt"></i> Open document</a></div>`;
+        }
 
-function closeMediaViewer() {
-    const viewer = document.getElementById('media-viewer');
-    const content = document.getElementById('viewer-content');
-    viewer.classList.add('hidden');
-    content.innerHTML = '';
-}
-
-// Upload handling
-const dropZone = document.getElementById('drop-zone');
-const fileInput = document.getElementById('upload-file');
-const progressDiv = document.getElementById('upload-progress');
-const progressBar = progressDiv.querySelector('div > div');
-
-dropZone.addEventListener('click', () => fileInput.click());
-
-dropZone.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    dropZone.classList.add('border-primary-500', 'bg-primary-50');
-});
-
-dropZone.addEventListener('dragleave', () => {
-    dropZone.classList.remove('border-primary-500', 'bg-primary-50');
-});
-
-dropZone.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('border-primary-500', 'bg-primary-50');
-    handleFiles(e.dataTransfer.files);
-});
-
-fileInput.addEventListener('change', () => {
-    handleFiles(fileInput.files);
-});
-
-function handleFiles(files) {
-    if (!files.length) return;
-
-    const relatedTo = document.getElementById('media-related-to').value;
-    const relatedId = document.getElementById('media-related-id').value;
-    if (relatedTo !== 'general' && !relatedId) {
-        showAlert(`Please select a ${relatedTo}.`, 'Select Record', 'warning');
-        return;
+        viewer.classList.remove('hidden');
     }
 
-    const selectedFiles = Array.from(files);
-    const invalidFile = selectedFiles.find(file => {
-        const isVideo = file.type.startsWith('video/');
-        const isImage = file.type.startsWith('image/');
-        const isDocument = !isVideo && !isImage;
-        return (isVideo && file.size > 10 * 1024 * 1024) || ((isImage || isDocument) && file.size > 5 * 1024 * 1024);
+    function closeMediaViewer() {
+        const viewer = document.getElementById('media-viewer');
+        const content = document.getElementById('viewer-content');
+        viewer.classList.add('hidden');
+        content.innerHTML = '';
+    }
+
+    // Upload handling
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('upload-file');
+    const progressDiv = document.getElementById('upload-progress');
+    const progressBar = progressDiv.querySelector('div > div');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.classList.add('border-primary-500', 'bg-primary-50');
     });
-    if (invalidFile) {
-        const limit = invalidFile.type.startsWith('video/') ? '10 MB' : '5 MB';
-        showAlert(`${invalidFile.name} exceeds the ${limit} upload limit.`, 'File Too Large', 'warning');
-        fileInput.value = '';
-        return;
-    }
-    
-    progressDiv.classList.remove('hidden');
-    let uploaded = 0;
-    let successfulUploads = 0;
-    
-    selectedFiles.forEach(file => {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('csrf_token', '<?php echo csrfToken(); ?>');
-        formData.append('related_to', relatedTo);
-        if (relatedId) formData.append('related_id', relatedId);
-        
-        fetch('api/upload.php', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            uploaded++;
-            const progress = (uploaded / files.length) * 100;
-            progressBar.style.width = progress + '%';
-            
-            if (!data.success) {
-                showAlert(data.message || `Could not upload ${file.name}.`, 'Upload Failed', 'danger');
-            } else {
-                successfulUploads++;
-            }
-            if (uploaded === selectedFiles.length && successfulUploads > 0) {
-                setTimeout(() => window.location.reload(), 500);
-            }
-        })
-        .catch(error => {
-            console.error('Upload error:', error);
-            uploaded++;
-            showAlert(`Could not upload ${file.name}.`, 'Upload Failed', 'danger');
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.classList.remove('border-primary-500', 'bg-primary-50');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('border-primary-500', 'bg-primary-50');
+        handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', () => {
+        handleFiles(fileInput.files);
+    });
+
+    function handleFiles(files) {
+        if (!files.length) return;
+
+        const relatedTo = document.getElementById('media-related-to').value;
+        const relatedId = document.getElementById('media-related-id').value;
+        if (relatedTo !== 'general' && !relatedId) {
+            showAlert(`Please select a ${relatedTo}.`, 'Select Record', 'warning');
+            return;
+        }
+
+        const selectedFiles = Array.from(files);
+        const invalidFile = selectedFiles.find(file => {
+            const isVideo = file.type.startsWith('video/');
+            const isImage = file.type.startsWith('image/');
+            const isDocument = !isVideo && !isImage;
+            return (isVideo && file.size > 10 * 1024 * 1024) || ((isImage || isDocument) && file.size > 5 * 1024 * 1024);
         });
-    });
-}
+        if (invalidFile) {
+            const limit = invalidFile.type.startsWith('video/') ? '10 MB' : '5 MB';
+            showAlert(`${invalidFile.name} exceeds the ${limit} upload limit.`, 'File Too Large', 'warning');
+            fileInput.value = '';
+            return;
+        }
+
+        progressDiv.classList.remove('hidden');
+        let uploaded = 0;
+        let successfulUploads = 0;
+
+        selectedFiles.forEach(file => {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('csrf_token', '<?php echo csrfToken(); ?>');
+            formData.append('related_to', relatedTo);
+            if (relatedId) formData.append('related_id', relatedId);
+
+            fetch('api/upload.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    uploaded++;
+                    const progress = (uploaded / files.length) * 100;
+                    progressBar.style.width = progress + '%';
+
+                    if (!data.success) {
+                        showAlert(data.message || `Could not upload ${file.name}.`, 'Upload Failed', 'danger');
+                    } else {
+                        successfulUploads++;
+                    }
+                    if (uploaded === selectedFiles.length && successfulUploads > 0) {
+                        setTimeout(() => window.location.reload(), 500);
+                    }
+                })
+                .catch(error => {
+                    console.error('Upload error:', error);
+                    uploaded++;
+                    showAlert(`Could not upload ${file.name}.`, 'Upload Failed', 'danger');
+                });
+        });
+    }
 </script>
 
 <?php include 'includes/footer.php'; ?>

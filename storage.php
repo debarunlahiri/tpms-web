@@ -12,7 +12,7 @@ if (isset($_GET['delete']) && is_numeric($_GET['delete'])) {
         $stmt = $db->prepare("SELECT * FROM media WHERE id=?");
         $stmt->execute([$id]);
         $media = $stmt->fetch();
-        
+
         if ($media) {
             $filePath = __DIR__ . '/' . $media['file_path'];
             if (file_exists($filePath)) {
@@ -55,7 +55,7 @@ include 'includes/sidebar.php';
 
 <div class="lg:ml-64 min-h-screen transition-all duration-300">
     <?php include 'includes/topbar.php'; ?>
-    
+
     <main class="p-6 pt-20">
         <div class="mb-8 animate-fade-in">
             <h1 class="text-3xl font-bold text-secondary-900">Storage Management</h1>
@@ -167,22 +167,22 @@ include 'includes/sidebar.php';
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
-                        <?php foreach ($userStats as $user): 
+                        <?php foreach ($userStats as $user):
                             $percent = $totalSize > 0 ? round(($user['total_size'] / $totalSize) * 100, 1) : 0;
                         ?>
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4 font-medium text-secondary-900"><?php echo sanitize($user['name']); ?></td>
-                            <td class="px-6 py-4 text-sm text-gray-600"><?php echo number_format($user['file_count']); ?></td>
-                            <td class="px-6 py-4 text-sm text-gray-600"><?php echo formatBytes($user['total_size']); ?></td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden max-w-[150px]">
-                                        <div class="h-full bg-primary-500 rounded-full" style="width: <?php echo $percent; ?>"></div>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4 font-medium text-secondary-900"><?php echo sanitize($user['name']); ?></td>
+                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo number_format($user['file_count']); ?></td>
+                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo formatBytes($user['total_size']); ?></td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden max-w-[150px]">
+                                            <div class="h-full bg-primary-500 rounded-full" style="width: <?php echo $percent; ?>"></div>
+                                        </div>
+                                        <span class="text-sm text-gray-600 w-12"><?php echo $percent; ?>%</span>
                                     </div>
-                                    <span class="text-sm text-gray-600 w-12"><?php echo $percent; ?>%</span>
-                                </div>
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -209,30 +209,30 @@ include 'includes/sidebar.php';
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <?php foreach ($media as $item): ?>
-                        <tr class="hover:bg-gray-50 transition-colors">
-                            <td class="px-6 py-4">
-                                <?php if ($item['file_type'] === 'image'): ?>
-                                <img src="<?php echo sanitize($item['file_path']); ?>" alt="" class="w-12 h-12 rounded object-cover">
-                                <?php else: ?>
-                                <div class="w-12 h-12 rounded bg-gray-800 flex items-center justify-center"><i class="fas fa-video text-white"></i></div>
-                                <?php endif; ?>
-                            </td>
-                            <td class="px-6 py-4">
-                                <p class="font-medium text-secondary-900 truncate max-w-[200px]"><?php echo sanitize($item['original_name']); ?></p>
-                                <p class="text-xs text-gray-500"><?php echo sanitize($item['file_path']); ?></p>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-600 capitalize"><?php echo $item['file_type']; ?></td>
-                            <td class="px-6 py-4 text-sm text-gray-600"><?php echo formatBytes($item['file_size']); ?></td>
-                            <td class="px-6 py-4 text-sm text-gray-600"><?php echo sanitize($item['uploader_name'] ?? 'Unknown'); ?></td>
-                            <td class="px-6 py-4 text-sm text-gray-500"><?php echo formatDate($item['created_at']); ?></td>
-                            <td class="px-6 py-4 text-right">
-                                <div class="flex items-center justify-end gap-2">
-                                    <a href="<?php echo sanitize($item['file_path']); ?>" target="_blank" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><i class="fas fa-eye"></i></a>
-                                    <a href="<?php echo sanitize($item['file_path']); ?>" download class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"><i class="fas fa-download"></i></a>
-                                    <a href="storage.php?delete=<?php echo $item['id']; ?>" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" data-confirm="Delete this media file? This cannot be undone."><i class="fas fa-trash"></i></a>
-                                </div>
-                            </td>
-                        </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <?php if ($item['file_type'] === 'image'): ?>
+                                        <img src="<?php echo sanitize($item['file_path']); ?>" alt="" class="w-12 h-12 rounded object-cover">
+                                    <?php else: ?>
+                                        <div class="w-12 h-12 rounded bg-gray-800 flex items-center justify-center"><i class="fas fa-video text-white"></i></div>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <p class="font-medium text-secondary-900 truncate max-w-[200px]"><?php echo sanitize($item['original_name']); ?></p>
+                                    <p class="text-xs text-gray-500"><?php echo sanitize($item['file_path']); ?></p>
+                                </td>
+                                <td class="px-6 py-4 text-sm text-gray-600 capitalize"><?php echo $item['file_type']; ?></td>
+                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo formatBytes($item['file_size']); ?></td>
+                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo sanitize($item['uploader_name'] ?? 'Unknown'); ?></td>
+                                <td class="px-6 py-4 text-sm text-gray-500"><?php echo formatDate($item['created_at']); ?></td>
+                                <td class="px-6 py-4 text-right">
+                                    <div class="flex items-center justify-end gap-2">
+                                        <a href="<?php echo sanitize($item['file_path']); ?>" target="_blank" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><i class="fas fa-eye"></i></a>
+                                        <a href="<?php echo sanitize($item['file_path']); ?>" download class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors"><i class="fas fa-download"></i></a>
+                                        <a href="storage.php?delete=<?php echo $item['id']; ?>" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" data-confirm="Delete this media file? This cannot be undone."><i class="fas fa-trash"></i></a>
+                                    </div>
+                                </td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
@@ -242,13 +242,13 @@ include 'includes/sidebar.php';
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        document.querySelectorAll('[data-width]').forEach(bar => {
-            bar.style.width = bar.dataset.width + '%';
-        });
-    }, 500);
-});
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            document.querySelectorAll('[data-width]').forEach(bar => {
+                bar.style.width = bar.dataset.width + '%';
+            });
+        }, 500);
+    });
 </script>
 
 <?php include 'includes/footer.php'; ?>

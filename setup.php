@@ -45,6 +45,16 @@ try {
     } catch (Exception $e) {
         // Column may already exist
     }
+
+    // Add GST and shipping details to contacts if not exists
+    try {
+        foreach (['gstin' => 'VARCHAR(30) DEFAULT NULL', 'state' => 'VARCHAR(100) DEFAULT NULL', 'state_code' => 'VARCHAR(10) DEFAULT NULL', 'shipping_name' => 'VARCHAR(200) DEFAULT NULL', 'shipping_address' => 'TEXT DEFAULT NULL', 'shipping_gstin' => 'VARCHAR(30) DEFAULT NULL', 'shipping_state' => 'VARCHAR(100) DEFAULT NULL', 'shipping_state_code' => 'VARCHAR(10) DEFAULT NULL'] as $column => $definition) {
+            $check = $pdo->query("SHOW COLUMNS FROM contacts LIKE " . $pdo->quote($column));
+            if (!$check->fetch()) $pdo->exec("ALTER TABLE contacts ADD COLUMN `$column` $definition");
+        }
+    } catch (Exception $e) {
+        // Contact fields may already exist
+    }
     
     // Add project_id to tasks if not exists
     try {
@@ -105,11 +115,27 @@ try {
             issue_date DATE NOT NULL,
             due_date DATE DEFAULT NULL,
             status ENUM('draft','sent','paid','overdue','cancelled') DEFAULT 'draft',
+            reverse_charge CHAR(1) DEFAULT 'N',
+            billing_gstin VARCHAR(30) DEFAULT NULL,
+            supply_state VARCHAR(100) DEFAULT NULL,
+            state_code VARCHAR(10) DEFAULT NULL,
+            place_of_supply VARCHAR(150) DEFAULT NULL,
+            shipping_name VARCHAR(200) DEFAULT NULL,
+            shipping_address TEXT DEFAULT NULL,
+            shipping_gstin VARCHAR(30) DEFAULT NULL,
+            shipping_state VARCHAR(100) DEFAULT NULL,
+            shipping_state_code VARCHAR(10) DEFAULT NULL,
             subtotal DECIMAL(15,2) DEFAULT 0,
             tax_rate DECIMAL(5,2) DEFAULT 0,
             tax_amount DECIMAL(15,2) DEFAULT 0,
             gst_rate DECIMAL(5,2) DEFAULT 0,
             gst_amount DECIMAL(15,2) DEFAULT 0,
+            igst_rate DECIMAL(5,2) DEFAULT 0,
+            igst_amount DECIMAL(15,2) DEFAULT 0,
+            cgst_rate DECIMAL(5,2) DEFAULT 0,
+            cgst_amount DECIMAL(15,2) DEFAULT 0,
+            sgst_rate DECIMAL(5,2) DEFAULT 0,
+            sgst_amount DECIMAL(15,2) DEFAULT 0,
             discount DECIMAL(15,2) DEFAULT 0,
             total DECIMAL(15,2) DEFAULT 0,
             notes TEXT DEFAULT NULL,
@@ -126,6 +152,8 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             invoice_id INT NOT NULL,
             description TEXT NOT NULL,
+            sac_code VARCHAR(50) DEFAULT NULL,
+            other_charge DECIMAL(15,2) DEFAULT 0,
             quantity DECIMAL(10,2) DEFAULT 1,
             unit_price DECIMAL(15,2) DEFAULT 0,
             amount DECIMAL(15,2) DEFAULT 0,
@@ -139,15 +167,21 @@ try {
     // Ensure invoice settings exist
     try {
         $pdo->exec("INSERT INTO settings (setting_key, setting_value) VALUES
-            ('company_address', ''),
+            ('company_name', 'TECHPRO IT SOLUTIONS'),
+            ('company_email', 'info@techproitsolutions.in'),
+            ('company_address', '220 PLOT-8, AGGARWAL TOWER, LSC-11, MANDAWALI FAZALPUR, NEW DELHI-92, INDIA'),
             ('company_phone', ''),
-            ('company_gstin', ''),
+            ('company_gstin', '07AIAPB4587B1ZP'),
+            ('bank_name_branch', 'Canara Bank, Patparganj'),
+            ('bank_account_name', 'Techpro IT Solutions'),
+            ('bank_account_number', '2756201000509'),
+            ('bank_ifsc', 'CNRB0002756'),
             ('invoice_prefix', 'INV-'),
             ('invoice_next_number', '1001'),
             ('invoice_tax_rate', '0'),
             ('invoice_gst_rate', '18'),
             ('invoice_terms', '')
-            ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)");
+            ON DUPLICATE KEY UPDATE setting_value = setting_value");
     } catch (Exception $e) {
         // Settings may already exist
     }

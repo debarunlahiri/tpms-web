@@ -78,7 +78,7 @@ include 'includes/sidebar.php';
 
 <div class="lg:ml-64 min-h-screen transition-all duration-300">
     <?php include 'includes/topbar.php'; ?>
-    
+
     <main class="p-6 pt-20">
         <!-- Page Header -->
         <div class="mb-8 animate-fade-in">
@@ -91,7 +91,7 @@ include 'includes/sidebar.php';
             <div class="stat-card bg-white rounded-xl p-6 shadow-sm border border-gray-100 animate-slide-up stagger-1">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-gray-500 mb-1">Total Contacts</p>
+                        <p class="text-sm font-medium text-gray-500 mb-1">Total Clients</p>
                         <h3 class="text-3xl font-bold text-secondary-900" data-counter="<?php echo $stats['contacts']; ?>">0</h3>
                     </div>
                     <div class="w-12 h-12 rounded-lg bg-blue-50 flex items-center justify-center">
@@ -184,22 +184,22 @@ include 'includes/sidebar.php';
                     <a href="deals.php" class="text-primary-600 hover:text-primary-700 text-sm font-medium">View All</a>
                 </div>
                 <div class="space-y-4">
-                    <?php foreach ($stageLabels as $index => $stage): 
+                    <?php foreach ($stageLabels as $index => $stage):
                         $count = $stageData[$stage]['count'];
                         $value = $stageData[$stage]['value'];
                         $maxValue = max(array_merge(array_column($stageData, 'value'), [1]));
                         $width = ($value / $maxValue) * 100;
                         $colors = ['bg-gray-500', 'bg-blue-500', 'bg-yellow-500', 'bg-orange-500', 'bg-green-500', 'bg-red-500'];
                     ?>
-                    <div class="group">
-                        <div class="flex justify-between text-sm mb-1">
-                            <span class="font-medium text-gray-700 capitalize"><?php echo str_replace('_', ' ', $stage); ?></span>
-                            <span class="text-gray-500"><?php echo $count; ?> deals - <?php echo formatCurrency($value); ?></span>
+                        <div class="group">
+                            <div class="flex justify-between text-sm mb-1">
+                                <span class="font-medium text-gray-700 capitalize"><?php echo str_replace('_', ' ', $stage); ?></span>
+                                <span class="text-gray-500"><?php echo $count; ?> deals - <?php echo formatCurrency($value); ?></span>
+                            </div>
+                            <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
+                                <div class="h-full <?php echo $colors[$index]; ?> rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="<?php echo $width; ?>"></div>
+                            </div>
                         </div>
-                        <div class="h-3 bg-gray-100 rounded-full overflow-hidden">
-                            <div class="h-full <?php echo $colors[$index]; ?> rounded-full transition-all duration-1000 ease-out" style="width: 0%" data-width="<?php echo $width; ?>"></div>
-                        </div>
-                    </div>
                     <?php endforeach; ?>
                 </div>
             </div>
@@ -211,16 +211,16 @@ include 'includes/sidebar.php';
                         <p class="text-gray-500 text-center py-8">No pending tasks</p>
                     <?php else: ?>
                         <?php foreach ($upcomingTasks as $task): ?>
-                        <div class="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                            <div class="w-8 h-8 rounded-full bg-<?php echo $task['priority'] === 'high' ? 'red' : ($task['priority'] === 'medium' ? 'yellow' : 'green'); ?>-100 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-<?php echo $task['type'] === 'call' ? 'phone' : ($task['type'] === 'email' ? 'envelope' : ($task['type'] === 'meeting' ? 'calendar' : 'check')); ?> text-xs text-<?php echo $task['priority'] === 'high' ? 'red' : ($task['priority'] === 'medium' ? 'yellow' : 'green'); ?>-600"></i>
+                            <div class="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors">
+                                <div class="w-8 h-8 rounded-full bg-<?php echo $task['priority'] === 'high' ? 'red' : ($task['priority'] === 'medium' ? 'yellow' : 'green'); ?>-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-<?php echo $task['type'] === 'call' ? 'phone' : ($task['type'] === 'email' ? 'envelope' : ($task['type'] === 'meeting' ? 'calendar' : 'check')); ?> text-xs text-<?php echo $task['priority'] === 'high' ? 'red' : ($task['priority'] === 'medium' ? 'yellow' : 'green'); ?>-600"></i>
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-secondary-900 truncate"><?php echo sanitize($task['title']); ?></p>
+                                    <p class="text-xs text-gray-500"><?php echo $task['due_date'] ? formatDate($task['due_date'], 'M d, Y') : 'No due date'; ?></p>
+                                </div>
+                                <a href="tasks.php?complete=<?php echo $task['id']; ?>" class="text-green-500 hover:text-green-700" data-confirm="Mark this task as completed?"><i class="fas fa-check-circle"></i></a>
                             </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-secondary-900 truncate"><?php echo sanitize($task['title']); ?></p>
-                                <p class="text-xs text-gray-500"><?php echo $task['due_date'] ? formatDate($task['due_date'], 'M d, Y') : 'No due date'; ?></p>
-                            </div>
-                            <a href="tasks.php?complete=<?php echo $task['id']; ?>" class="text-green-500 hover:text-green-700" data-confirm="Mark this task as completed?"><i class="fas fa-check-circle"></i></a>
-                        </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
@@ -246,24 +246,26 @@ include 'includes/sidebar.php';
                         </thead>
                         <tbody class="divide-y divide-gray-100">
                             <?php if (empty($recentLeads)): ?>
-                                <tr><td colspan="3" class="py-8 text-center text-gray-500">No leads found</td></tr>
+                                <tr>
+                                    <td colspan="3" class="py-8 text-center text-gray-500">No leads found</td>
+                                </tr>
                             <?php else: ?>
                                 <?php foreach ($recentLeads as $lead): ?>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="py-3">
-                                        <div class="flex items-center gap-3">
-                                            <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-xs font-bold text-primary-700">
-                                                <?php echo getInitials(($lead['first_name'] ?? '') . ' ' . ($lead['last_name'] ?? '')); ?>
+                                    <tr class="hover:bg-gray-50 transition-colors">
+                                        <td class="py-3">
+                                            <div class="flex items-center gap-3">
+                                                <div class="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-xs font-bold text-primary-700">
+                                                    <?php echo getInitials(($lead['first_name'] ?? '') . ' ' . ($lead['last_name'] ?? '')); ?>
+                                                </div>
+                                                <div>
+                                                    <p class="text-sm font-medium text-secondary-900"><?php echo sanitize($lead['title']); ?></p>
+                                                    <p class="text-xs text-gray-500"><?php echo sanitize($lead['company'] ?? 'No Company'); ?></p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <p class="text-sm font-medium text-secondary-900"><?php echo sanitize($lead['title']); ?></p>
-                                                <p class="text-xs text-gray-500"><?php echo sanitize($lead['company'] ?? 'No Company'); ?></p>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="py-3"><span class="px-2 py-1 text-xs rounded-full <?php echo statusColor($lead['status']); ?>"><?php echo ucfirst($lead['status']); ?></span></td>
-                                    <td class="py-3 text-sm font-medium text-secondary-900"><?php echo formatCurrency($lead['estimated_value']); ?></td>
-                                </tr>
+                                        </td>
+                                        <td class="py-3"><span class="px-2 py-1 text-xs rounded-full <?php echo statusColor($lead['status']); ?>"><?php echo ucfirst($lead['status']); ?></span></td>
+                                        <td class="py-3 text-sm font-medium text-secondary-900"><?php echo formatCurrency($lead['estimated_value']); ?></td>
+                                    </tr>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </tbody>
@@ -281,15 +283,15 @@ include 'includes/sidebar.php';
                         <p class="text-gray-500 text-center py-8">No recent activity</p>
                     <?php else: ?>
                         <?php foreach ($activities as $activity): ?>
-                        <div class="flex gap-3">
-                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
-                                <i class="fas fa-<?php echo $activity['action'] === 'login' ? 'sign-in-alt' : ($activity['action'] === 'create' ? 'plus' : ($activity['action'] === 'update' ? 'edit' : 'trash')); ?> text-xs text-gray-600"></i>
+                            <div class="flex gap-3">
+                                <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                    <i class="fas fa-<?php echo $activity['action'] === 'login' ? 'sign-in-alt' : ($activity['action'] === 'create' ? 'plus' : ($activity['action'] === 'update' ? 'edit' : 'trash')); ?> text-xs text-gray-600"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-secondary-900"><?php echo sanitize($activity['description']); ?></p>
+                                    <p class="text-xs text-gray-500"><?php echo sanitize($activity['user_name'] ?? 'System'); ?> &bull; <?php echo formatDate($activity['created_at'], 'M d, H:i'); ?></p>
+                                </div>
                             </div>
-                            <div class="flex-1">
-                                <p class="text-sm text-secondary-900"><?php echo sanitize($activity['description']); ?></p>
-                                <p class="text-xs text-gray-500"><?php echo sanitize($activity['user_name'] ?? 'System'); ?> &bull; <?php echo formatDate($activity['created_at'], 'M d, H:i'); ?></p>
-                            </div>
-                        </div>
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
@@ -300,107 +302,153 @@ include 'includes/sidebar.php';
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
 <script>
-// Animate progress bars
-document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(() => {
-        document.querySelectorAll('[data-width]').forEach(bar => {
-            bar.style.width = bar.dataset.width + '%';
-        });
-    }, 500);
+    // Animate progress bars
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(() => {
+            document.querySelectorAll('[data-width]').forEach(bar => {
+                bar.style.width = bar.dataset.width + '%';
+            });
+        }, 500);
 
-    const chartText = '#64748b';
-    const gridColor = 'rgba(148, 163, 184, 0.16)';
-    Chart.defaults.color = chartText;
-    Chart.defaults.font.family = 'ui-sans-serif, system-ui, sans-serif';
+        const chartText = '#64748b';
+        const gridColor = 'rgba(148, 163, 184, 0.16)';
+        Chart.defaults.color = chartText;
+        Chart.defaults.font.family = 'ui-sans-serif, system-ui, sans-serif';
 
-    new Chart(document.getElementById('salesTrendChart'), {
-        type: 'line',
-        data: {
-            labels: <?php echo json_encode(array_values($monthLabels)); ?>,
-            datasets: [
-                {
-                    label: 'Leads',
-                    data: <?php echo json_encode(array_values($monthlyLeads)); ?>,
-                    borderColor: '#8b5cf6',
-                    backgroundColor: 'rgba(139, 92, 246, 0.12)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#8b5cf6'
+        new Chart(document.getElementById('salesTrendChart'), {
+            type: 'line',
+            data: {
+                labels: <?php echo json_encode(array_values($monthLabels)); ?>,
+                datasets: [{
+                        label: 'Leads',
+                        data: <?php echo json_encode(array_values($monthlyLeads)); ?>,
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.12)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#8b5cf6'
+                    },
+                    {
+                        label: 'Deals',
+                        data: <?php echo json_encode(array_values($monthlyDeals)); ?>,
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.08)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#2563eb'
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Won Revenue',
+                        data: <?php echo json_encode(array_values($monthlyRevenue)); ?>,
+                        backgroundColor: 'rgba(34, 197, 94, 0.22)',
+                        borderColor: '#22c55e',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        yAxisID: 'yRevenue'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
                 },
-                {
-                    label: 'Deals',
-                    data: <?php echo json_encode(array_values($monthlyDeals)); ?>,
-                    borderColor: '#2563eb',
-                    backgroundColor: 'rgba(37, 99, 235, 0.08)',
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 4,
-                    pointBackgroundColor: '#2563eb'
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 8
+                        }
+                    }
                 },
-                {
-                    type: 'bar',
-                    label: 'Won Revenue',
-                    data: <?php echo json_encode(array_values($monthlyRevenue)); ?>,
-                    backgroundColor: 'rgba(34, 197, 94, 0.22)',
-                    borderColor: '#22c55e',
-                    borderWidth: 1,
-                    borderRadius: 6,
-                    yAxisID: 'yRevenue'
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        },
+                        grid: {
+                            color: gridColor
+                        },
+                        title: {
+                            display: true,
+                            text: 'Records'
+                        }
+                    },
+                    yRevenue: {
+                        beginAtZero: true,
+                        position: 'right',
+                        grid: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Revenue'
+                        }
+                    }
                 }
-            ]
-        },
-        options: {
+            }
+        });
+
+        const doughnutOptions = {
             responsive: true,
             maintainAspectRatio: false,
-            interaction: { intersect: false, mode: 'index' },
-            plugins: { legend: { position: 'top', align: 'end', labels: { usePointStyle: true, boxWidth: 8 } } },
-            scales: {
-                x: { grid: { display: false } },
-                y: { beginAtZero: true, ticks: { precision: 0 }, grid: { color: gridColor }, title: { display: true, text: 'Records' } },
-                yRevenue: { beginAtZero: true, position: 'right', grid: { display: false }, title: { display: true, text: 'Revenue' } }
+            cutout: '62%',
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        boxWidth: 8,
+                        padding: 14
+                    }
+                },
+                tooltip: {
+                    displayColors: true
+                }
             }
-        }
-    });
+        };
 
-    const doughnutOptions = {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutout: '62%',
-        plugins: {
-            legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8, padding: 14 } },
-            tooltip: { displayColors: true }
-        }
-    };
+        new Chart(document.getElementById('dealStageChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Prospecting', 'Qualification', 'Proposal', 'Negotiation', 'Won', 'Lost'],
+                datasets: [{
+                    data: <?php echo json_encode(array_map('intval', array_column($stageData, 'count'))); ?>,
+                    backgroundColor: ['#64748b', '#3b82f6', '#eab308', '#f97316', '#22c55e', '#ef4444'],
+                    borderWidth: 0,
+                    hoverOffset: 7
+                }]
+            },
+            options: doughnutOptions
+        });
 
-    new Chart(document.getElementById('dealStageChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Prospecting', 'Qualification', 'Proposal', 'Negotiation', 'Won', 'Lost'],
-            datasets: [{
-                data: <?php echo json_encode(array_map('intval', array_column($stageData, 'count'))); ?>,
-                backgroundColor: ['#64748b', '#3b82f6', '#eab308', '#f97316', '#22c55e', '#ef4444'],
-                borderWidth: 0,
-                hoverOffset: 7
-            }]
-        },
-        options: doughnutOptions
+        new Chart(document.getElementById('taskStatusChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'In Progress', 'Completed', 'Cancelled'],
+                datasets: [{
+                    data: <?php echo json_encode(array_values($taskStatusData)); ?>,
+                    backgroundColor: ['#f59e0b', '#3b82f6', '#22c55e', '#94a3b8'],
+                    borderWidth: 0,
+                    hoverOffset: 7
+                }]
+            },
+            options: doughnutOptions
+        });
     });
-
-    new Chart(document.getElementById('taskStatusChart'), {
-        type: 'doughnut',
-        data: {
-            labels: ['Pending', 'In Progress', 'Completed', 'Cancelled'],
-            datasets: [{
-                data: <?php echo json_encode(array_values($taskStatusData)); ?>,
-                backgroundColor: ['#f59e0b', '#3b82f6', '#22c55e', '#94a3b8'],
-                borderWidth: 0,
-                hoverOffset: 7
-            }]
-        },
-        options: doughnutOptions
-    });
-});
 </script>
 
 <?php include 'includes/footer.php'; ?>

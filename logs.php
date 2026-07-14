@@ -55,7 +55,7 @@ include 'includes/sidebar.php';
 
 <div class="lg:ml-64 min-h-screen transition-all duration-300">
     <?php include 'includes/topbar.php'; ?>
-    
+
     <main class="p-6 pt-20">
         <div class="mb-8 animate-fade-in">
             <h1 class="text-3xl font-bold text-secondary-900">Activity Logs</h1>
@@ -66,20 +66,20 @@ include 'includes/sidebar.php';
             <div class="p-4 border-b border-gray-100 flex flex-col sm:flex-row gap-4">
                 <form method="GET" action="" class="flex flex-wrap items-end gap-3">
                     <label class="flex flex-col gap-1 text-xs font-medium text-gray-600">User
-                    <select name="user_id" class="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 font-normal focus:outline-none focus:border-primary-500">
-                        <option value="">All Users</option>
-                        <?php foreach ($users as $user): ?>
-                        <option value="<?php echo $user['id']; ?>" <?php echo ($_GET['user_id'] ?? '') == $user['id'] ? 'selected' : ''; ?>><?php echo sanitize($user['name']); ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                        <select name="user_id" class="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 font-normal focus:outline-none focus:border-primary-500">
+                            <option value="">All Users</option>
+                            <?php foreach ($users as $user): ?>
+                                <option value="<?php echo $user['id']; ?>" <?php echo ($_GET['user_id'] ?? '') == $user['id'] ? 'selected' : ''; ?>><?php echo sanitize($user['name']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </label>
                     <label class="flex flex-col gap-1 text-xs font-medium text-gray-600">Action
-                    <select name="action" class="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 font-normal focus:outline-none focus:border-primary-500">
-                        <option value="">All Actions</option>
-                        <?php foreach ($actions as $actionType): ?>
-                        <option value="<?php echo $actionType; ?>" <?php echo ($_GET['action'] ?? '') === $actionType ? 'selected' : ''; ?>><?php echo ucwords(str_replace('_', ' ', $actionType)); ?></option>
-                        <?php endforeach; ?>
-                    </select>
+                        <select name="action" class="px-3 py-2 border border-gray-200 rounded-lg text-sm text-gray-900 font-normal focus:outline-none focus:border-primary-500">
+                            <option value="">All Actions</option>
+                            <?php foreach ($actions as $actionType): ?>
+                                <option value="<?php echo $actionType; ?>" <?php echo ($_GET['action'] ?? '') === $actionType ? 'selected' : ''; ?>><?php echo ucwords(str_replace('_', ' ', $actionType)); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </label>
                     <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700 transition-colors">Filter</button>
                     <a href="logs.php" class="px-4 py-2 border border-gray-200 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition-colors">Reset</a>
@@ -99,19 +99,21 @@ include 'includes/sidebar.php';
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <?php if (empty($logs)): ?>
-                            <tr><td colspan="5" class="px-6 py-12 text-center text-gray-500">No logs found.</td></tr>
+                            <tr>
+                                <td colspan="5" class="px-6 py-12 text-center text-gray-500">No logs found.</td>
+                            </tr>
                         <?php else: ?>
                             <?php foreach ($logs as $log): ?>
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap"><?php echo formatDate($log['created_at'], 'Y-m-d H:i:s'); ?></td>
-                                <td class="px-6 py-4">
-                                    <p class="text-sm font-medium text-secondary-900"><?php echo sanitize($log['user_name'] ?? 'System'); ?></p>
-                                    <p class="text-xs text-gray-500"><?php echo sanitize($log['user_email'] ?? ''); ?></p>
-                                </td>
-                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full bg-gray-100 text-gray-700 capitalize"><?php echo str_replace('_', ' ', $log['action']); ?></span></td>
-                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo sanitize($log['description']); ?></td>
-                                <td class="px-6 py-4 text-sm text-gray-500 font-mono"><?php echo sanitize($log['ip_address'] ?? '-'); ?></td>
-                            </tr>
+                                <tr class="hover:bg-gray-50 transition-colors">
+                                    <td class="px-6 py-4 text-sm text-gray-600 whitespace-nowrap"><?php echo formatDate($log['created_at'], 'Y-m-d H:i:s'); ?></td>
+                                    <td class="px-6 py-4">
+                                        <p class="text-sm font-medium text-secondary-900"><?php echo sanitize($log['user_name'] ?? 'System'); ?></p>
+                                        <p class="text-xs text-gray-500"><?php echo sanitize($log['user_email'] ?? ''); ?></p>
+                                    </td>
+                                    <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full bg-gray-100 text-gray-700 capitalize"><?php echo str_replace('_', ' ', $log['action']); ?></span></td>
+                                    <td class="px-6 py-4 text-sm text-gray-600"><?php echo sanitize($log['description']); ?></td>
+                                    <td class="px-6 py-4 text-sm text-gray-500 font-mono"><?php echo sanitize($log['ip_address'] ?? '-'); ?></td>
+                                </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </tbody>
@@ -119,17 +121,17 @@ include 'includes/sidebar.php';
             </div>
 
             <?php if ($totalPages > 1): ?>
-            <div class="p-4 border-t border-gray-100 flex items-center justify-between">
-                <p class="text-sm text-gray-500">Showing <?php echo $offset + 1; ?> - <?php echo min($offset + $perPage, $total); ?> of <?php echo $total; ?></p>
-                <div class="flex gap-2">
-                    <?php if ($page > 1): ?>
-                    <a href="?page=<?php echo $page - 1; ?>&user_id=<?php echo $_GET['user_id'] ?? ''; ?>&action=<?php echo $_GET['action'] ?? ''; ?>" class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50 text-sm">Previous</a>
-                    <?php endif; ?>
-                    <?php if ($page < $totalPages): ?>
-                    <a href="?page=<?php echo $page + 1; ?>&user_id=<?php echo $_GET['user_id'] ?? ''; ?>&action=<?php echo $_GET['action'] ?? ''; ?>" class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50 text-sm">Next</a>
-                    <?php endif; ?>
+                <div class="p-4 border-t border-gray-100 flex items-center justify-between">
+                    <p class="text-sm text-gray-500">Showing <?php echo $offset + 1; ?> - <?php echo min($offset + $perPage, $total); ?> of <?php echo $total; ?></p>
+                    <div class="flex gap-2">
+                        <?php if ($page > 1): ?>
+                            <a href="?page=<?php echo $page - 1; ?>&user_id=<?php echo $_GET['user_id'] ?? ''; ?>&action=<?php echo $_GET['action'] ?? ''; ?>" class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50 text-sm">Previous</a>
+                        <?php endif; ?>
+                        <?php if ($page < $totalPages): ?>
+                            <a href="?page=<?php echo $page + 1; ?>&user_id=<?php echo $_GET['user_id'] ?? ''; ?>&action=<?php echo $_GET['action'] ?? ''; ?>" class="px-3 py-1 border border-gray-200 rounded hover:bg-gray-50 text-sm">Next</a>
+                        <?php endif; ?>
+                    </div>
                 </div>
-            </div>
             <?php endif; ?>
         </div>
     </main>

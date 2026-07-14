@@ -13,15 +13,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_settings'])) {
     if (!verifyCsrf($_POST['csrf_token'] ?? '')) {
         $error = 'Invalid security token.';
     } else {
+        $currencyMap = ['INR'=>'₹','USD'=>'$','EUR'=>'€','GBP'=>'£','AED'=>'د.إ','AUD'=>'A$','CAD'=>'C$','SGD'=>'S$','JPY'=>'¥'];
+        $selectedCurrencyCode = strtoupper(trim($_POST['currency_code'] ?? 'INR'));
+        if (!isset($currencyMap[$selectedCurrencyCode])) $selectedCurrencyCode = 'INR';
+        $conversionRate = floatval($_POST['currency_conversion_rate'] ?? 1);
+        if ($conversionRate <= 0) $conversionRate = 1;
         $settings = [
             'company_name' => trim($_POST['company_name'] ?? ''),
             'company_email' => trim($_POST['company_email'] ?? ''),
             'company_address' => trim($_POST['company_address'] ?? ''),
             'company_phone' => trim($_POST['company_phone'] ?? ''),
             'company_gstin' => trim($_POST['company_gstin'] ?? ''),
-            'currency' => trim($_POST['currency'] ?? '₹'),
-            'currency_code' => trim($_POST['currency_code'] ?? 'INR'),
-            'currency_conversion_rate' => trim($_POST['currency_conversion_rate'] ?? '1'),
+            'bank_name_branch' => trim($_POST['bank_name_branch'] ?? ''),
+            'bank_account_name' => trim($_POST['bank_account_name'] ?? ''),
+            'bank_account_number' => trim($_POST['bank_account_number'] ?? ''),
+            'bank_ifsc' => trim($_POST['bank_ifsc'] ?? ''),
+            'currency' => $currencyMap[$selectedCurrencyCode],
+            'currency_code' => $selectedCurrencyCode,
+            'currency_conversion_rate' => (string)$conversionRate,
             'timezone' => trim($_POST['timezone'] ?? 'UTC'),
             'date_format' => trim($_POST['date_format'] ?? 'Y-m-d'),
             'invoice_prefix' => trim($_POST['invoice_prefix'] ?? 'INV-'),
@@ -260,20 +269,36 @@ include 'includes/sidebar.php';
                         <input type="text" name="company_gstin" value="<?php echo sanitize($settings['company_gstin'] ?? ''); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
                     </div>
 
+                    <div class="md:col-span-2 pt-4 border-t border-gray-100">
+                        <h3 class="text-lg font-bold text-secondary-900 mb-4 flex items-center gap-2"><i class="fas fa-building-columns text-primary-600"></i> Invoice Bank Details</h3>
+                    </div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Bank Name &amp; Branch</label><input type="text" name="bank_name_branch" value="<?php echo sanitize($settings['bank_name_branch'] ?? 'Canara Bank, Patparganj'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Account Name</label><input type="text" name="bank_account_name" value="<?php echo sanitize($settings['bank_account_name'] ?? 'Techpro IT Solutions'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Bank Account Number</label><input type="text" name="bank_account_number" value="<?php echo sanitize($settings['bank_account_number'] ?? '2756201000509'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg"></div>
+                    <div><label class="block text-sm font-medium text-gray-700 mb-2">Bank IFSC</label><input type="text" name="bank_ifsc" value="<?php echo sanitize($settings['bank_ifsc'] ?? 'CNRB0002756'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg"></div>
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Currency Symbol</label>
-                        <input type="text" name="currency" value="<?php echo sanitize($settings['currency'] ?? '₹'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                        <select name="currency" id="currency-symbol" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <?php foreach (['₹'=>'INR - Indian Rupee','$'=>'USD - US Dollar','€'=>'EUR - Euro','£'=>'GBP - British Pound','د.إ'=>'AED - UAE Dirham','A$'=>'AUD - Australian Dollar','C$'=>'CAD - Canadian Dollar','S$'=>'SGD - Singapore Dollar','¥'=>'JPY - Japanese Yen'] as $symbol => $label): ?>
+                            <option value="<?php echo sanitize($symbol); ?>" data-code="<?php echo sanitize(substr($label, 0, 3)); ?>" <?php echo ($settings['currency'] ?? '₹') === $symbol ? 'selected' : ''; ?>><?php echo sanitize($symbol . ' — ' . $label); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Currency Code</label>
-                        <input type="text" name="currency_code" value="<?php echo sanitize($settings['currency_code'] ?? 'INR'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all" placeholder="INR">
+                        <select name="currency_code" id="currency-code" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <?php foreach (['INR'=>'₹','USD'=>'$','EUR'=>'€','GBP'=>'£','AED'=>'د.إ','AUD'=>'A$','CAD'=>'C$','SGD'=>'S$','JPY'=>'¥'] as $code => $symbol): ?>
+                            <option value="<?php echo $code; ?>" data-symbol="<?php echo sanitize($symbol); ?>" <?php echo ($settings['currency_code'] ?? 'INR') === $code ? 'selected' : ''; ?>><?php echo sanitize($code . ' — ' . $symbol); ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
 
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Conversion Rate</label>
-                        <input type="number" step="0.0001" name="currency_conversion_rate" value="<?php echo sanitize($settings['currency_conversion_rate'] ?? '1'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <p class="text-xs text-gray-500 mt-1">Multiplier applied to all amounts (1 = no conversion)</p>
+                        <input type="number" step="0.000001" min="0" name="currency_conversion_rate" id="currency-conversion-rate" value="<?php echo sanitize($settings['currency_conversion_rate'] ?? '1'); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                        <p id="currency-rate-status" class="text-xs text-gray-500 mt-1">INR base multiplier. It updates automatically when the currency changes.</p>
                     </div>
 
                     <div>
@@ -548,6 +573,42 @@ document.querySelectorAll('form').forEach(form => {
         }
     });
 });
+
+const currencySymbol = document.getElementById('currency-symbol');
+const currencyCode = document.getElementById('currency-code');
+const currencyRate = document.getElementById('currency-conversion-rate');
+const currencyRateStatus = document.getElementById('currency-rate-status');
+if (currencySymbol && currencyCode) {
+    const updateConversionRate = async () => {
+        const code = currencyCode.value;
+        if (!currencyRate) return;
+        if (code === 'INR') {
+            currencyRate.value = '1';
+            if (currencyRateStatus) currencyRateStatus.textContent = 'INR is the base currency. Conversion rate: 1.';
+            return;
+        }
+        if (currencyRateStatus) currencyRateStatus.innerHTML = '<i class="fas fa-circle-notch fa-spin mr-1"></i>Fetching latest INR to ' + code + ' rate...';
+        try {
+            const response = await fetch(`https://api.frankfurter.dev/v2/rate/INR/${encodeURIComponent(code)}`, {headers: {'Accept': 'application/json'}});
+            if (!response.ok) throw new Error('Rate unavailable');
+            const data = await response.json();
+            const rate = Number(data.rate);
+            if (!Number.isFinite(rate) || rate <= 0) throw new Error('Invalid rate');
+            currencyRate.value = rate.toFixed(6);
+            if (currencyRateStatus) currencyRateStatus.textContent = `Latest reference rate: 1 INR = ${rate.toFixed(6)} ${code} (${data.date || 'latest'}).`;
+        } catch (error) {
+            if (currencyRateStatus) currencyRateStatus.textContent = 'Automatic rate unavailable. You can enter the conversion rate manually.';
+        }
+    };
+    currencySymbol.addEventListener('change', async function() {
+        currencyCode.value = this.options[this.selectedIndex].dataset.code;
+        await updateConversionRate();
+    });
+    currencyCode.addEventListener('change', async function() {
+        currencySymbol.value = this.options[this.selectedIndex].dataset.symbol;
+        await updateConversionRate();
+    });
+}
 </script>
 
 <?php include 'includes/footer.php'; ?>

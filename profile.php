@@ -105,7 +105,10 @@ include 'includes/sidebar.php';
 <div class="lg:ml-64 min-h-screen transition-all duration-300">
     <?php include 'includes/topbar.php'; ?>
     <main class="p-6 pt-20">
-        <div class="mb-8 animate-fade-in"><h1 class="text-3xl font-bold text-secondary-900">My Profile</h1><p class="text-gray-500 mt-1">Manage your personal details and account security.</p></div>
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold text-secondary-900">My Profile</h1>
+            <p class="text-gray-500 mt-1">Manage your personal details and account security.</p>
+        </div>
         <?php if ($error): ?><div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700"><i class="fas fa-exclamation-circle mr-2"></i><?php echo sanitize($error); ?></div><?php endif; ?>
         <?php if ($success): ?><div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl text-green-700"><i class="fas fa-check-circle mr-2"></i><?php echo sanitize($success); ?></div><?php endif; ?>
 
@@ -119,7 +122,10 @@ include 'includes/sidebar.php';
                     <p class="text-gray-500 capitalize"><?php echo sanitize(str_replace('_', ' ', $profile['role'])); ?></p>
                     <span class="inline-flex mt-3 px-3 py-1 rounded-full text-xs font-medium <?php echo $profile['status'] === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'; ?>"><?php echo ucfirst($profile['status']); ?></span>
                 </div>
-                <div class="border-t border-gray-100 mt-6 pt-5 space-y-3 text-sm"><p class="flex justify-between"><span class="text-gray-500">Member since</span><span class="font-medium text-secondary-900"><?php echo formatDate($profile['created_at'], 'M Y'); ?></span></p><p class="flex justify-between"><span class="text-gray-500">Account role</span><span class="font-medium text-secondary-900 capitalize"><?php echo sanitize(str_replace('_', ' ', $profile['role'])); ?></span></p></div>
+                <div class="border-t border-gray-100 mt-6 pt-5 space-y-3 text-sm">
+                    <p class="flex justify-between"><span class="text-gray-500">Member since</span><span class="font-medium text-secondary-900"><?php echo formatDate($profile['created_at'], 'M Y'); ?></span></p>
+                    <p class="flex justify-between"><span class="text-gray-500">Account role</span><span class="font-medium text-secondary-900 capitalize"><?php echo sanitize(str_replace('_', ' ', $profile['role'])); ?></span></p>
+                </div>
             </div>
 
             <div class="xl:col-span-2 space-y-6">
@@ -130,7 +136,9 @@ include 'includes/sidebar.php';
                         <div><label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label><input name="name" required value="<?php echo sanitize($profile['name']); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"></div>
                         <div><label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label><input type="email" name="email" required value="<?php echo sanitize($profile['email']); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20"></div>
                         <div><label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label><input name="phone" value="<?php echo sanitize($profile['phone']); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20" placeholder="Optional"></div>
-                        <div><label class="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label><input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" class="w-full text-sm text-gray-500 file:mr-3 file:px-4 file:py-2.5 file:border-0 file:rounded-lg file:bg-primary-50 file:text-primary-700 file:font-medium hover:file:bg-primary-100"><p class="text-xs text-gray-400 mt-1">JPG, PNG, or WebP. Maximum 2 MB.</p></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">Profile Photo</label><input type="file" name="avatar" accept="image/jpeg,image/png,image/webp" class="w-full text-sm text-gray-500 file:mr-3 file:px-4 file:py-2.5 file:border-0 file:rounded-lg file:bg-primary-50 file:text-primary-700 file:font-medium hover:file:bg-primary-100">
+                            <p class="text-xs text-gray-400 mt-1">JPG, PNG, or WebP. Maximum 2 MB.</p>
+                        </div>
                     </div>
                     <button type="submit" class="mt-6 px-5 py-2.5 bg-primary-600 text-white rounded-lg font-medium hover:bg-primary-700"><i class="fas fa-save mr-2"></i>Save Profile</button>
                 </form>
@@ -138,7 +146,11 @@ include 'includes/sidebar.php';
                 <form method="POST" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-slide-up animate-delay-100">
                     <input type="hidden" name="csrf_token" value="<?php echo csrfToken(); ?>"><input type="hidden" name="action" value="change_password">
                     <h2 class="text-lg font-bold text-secondary-900 mb-6"><i class="fas fa-shield-alt text-primary-600 mr-2"></i>Change Password</h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5"><div><label class="block text-sm font-medium text-gray-700 mb-2">Current Password</label><input type="password" name="current_password" required autocomplete="current-password" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"></div><div><label class="block text-sm font-medium text-gray-700 mb-2">New Password</label><input type="password" name="new_password" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"></div><div><label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label><input type="password" name="confirm_password" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"></div></div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">Current Password</label><input type="password" name="current_password" required autocomplete="current-password" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">New Password</label><input type="password" name="new_password" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label><input type="password" name="confirm_password" required minlength="8" autocomplete="new-password" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500"></div>
+                    </div>
                     <button type="submit" class="mt-6 px-5 py-2.5 bg-secondary-900 text-white rounded-lg font-medium hover:bg-secondary-800"><i class="fas fa-key mr-2"></i>Update Password</button>
                 </form>
             </div>

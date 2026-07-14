@@ -135,7 +135,7 @@ include 'includes/sidebar.php';
 
 <div class="lg:ml-64 min-h-screen transition-all duration-300">
     <?php include 'includes/topbar.php'; ?>
-    
+
     <main class="p-6 pt-20">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-8 animate-fade-in">
             <div>
@@ -148,201 +148,203 @@ include 'includes/sidebar.php';
         </div>
 
         <?php if ($error): ?>
-        <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 animate-fade-in"><i class="fas fa-exclamation-circle mr-2"></i><?php echo sanitize($error); ?></div>
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 animate-fade-in"><i class="fas fa-exclamation-circle mr-2"></i><?php echo sanitize($error); ?></div>
         <?php endif; ?>
 
         <?php if ($success): ?>
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 animate-fade-in"><i class="fas fa-check-circle mr-2"></i><?php echo sanitize($success); ?></div>
+            <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 animate-fade-in"><i class="fas fa-check-circle mr-2"></i><?php echo sanitize($success); ?></div>
         <?php endif; ?>
 
         <?php if ($action === 'add' || ($action === 'edit' && $editTask)): ?>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-slide-up max-w-3xl">
-            <h2 class="text-xl font-bold text-secondary-900 mb-6"><?php echo $action === 'edit' ? 'Edit Task' : 'Add New Task'; ?></h2>
-            <form method="POST" action="tasks.php" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input type="hidden" name="csrf_token" value="<?php echo csrfToken(); ?>">
-                <?php if ($editTask): ?>
-                <input type="hidden" name="id" value="<?php echo $editTask['id']; ?>">
-                <?php endif; ?>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 animate-slide-up max-w-3xl">
+                <h2 class="text-xl font-bold text-secondary-900 mb-6"><?php echo $action === 'edit' ? 'Edit Task' : 'Add New Task'; ?></h2>
+                <form method="POST" action="tasks.php" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="hidden" name="csrf_token" value="<?php echo csrfToken(); ?>">
+                    <?php if ($editTask): ?>
+                        <input type="hidden" name="id" value="<?php echo $editTask['id']; ?>">
+                    <?php endif; ?>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Task Title *</label>
-                    <input type="text" name="title" required value="<?php echo sanitize($editTask['title'] ?? ''); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Task Title *</label>
+                        <input type="text" name="title" required value="<?php echo sanitize($editTask['title'] ?? ''); ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
-                    <select name="type" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <?php foreach (['call','email','meeting','follow_up','demo','other'] as $type): ?>
-                        <option value="<?php echo $type; ?>" <?php echo ($editTask['type'] ?? 'other') === $type ? 'selected' : ''; ?>><?php echo ucwords(str_replace('_', ' ', $type)); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Type</label>
+                        <select name="type" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <?php foreach (['call', 'email', 'meeting', 'follow_up', 'demo', 'other'] as $type): ?>
+                                <option value="<?php echo $type; ?>" <?php echo ($editTask['type'] ?? 'other') === $type ? 'selected' : ''; ?>><?php echo ucwords(str_replace('_', ' ', $type)); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
-                    <select name="priority" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <?php foreach (['low','medium','high'] as $priority): ?>
-                        <option value="<?php echo $priority; ?>" <?php echo ($editTask['priority'] ?? 'medium') === $priority ? 'selected' : ''; ?>><?php echo ucfirst($priority); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Priority</label>
+                        <select name="priority" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <?php foreach (['low', 'medium', 'high'] as $priority): ?>
+                                <option value="<?php echo $priority; ?>" <?php echo ($editTask['priority'] ?? 'medium') === $priority ? 'selected' : ''; ?>><?php echo ucfirst($priority); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                    <select name="status" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <?php foreach (['pending','in_progress','completed','cancelled'] as $status): ?>
-                        <option value="<?php echo $status; ?>" <?php echo ($editTask['status'] ?? 'pending') === $status ? 'selected' : ''; ?>><?php echo ucwords(str_replace('_', ' ', $status)); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                        <select name="status" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <?php foreach (['pending', 'in_progress', 'completed', 'cancelled'] as $status): ?>
+                                <option value="<?php echo $status; ?>" <?php echo ($editTask['status'] ?? 'pending') === $status ? 'selected' : ''; ?>><?php echo ucwords(str_replace('_', ' ', $status)); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
-                    <input type="datetime-local" name="due_date" value="<?php echo $editTask['due_date'] ? date('Y-m-d\TH:i', strtotime($editTask['due_date'])) : ''; ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
+                        <input type="datetime-local" name="due_date" value="<?php echo $editTask['due_date'] ? date('Y-m-d\TH:i', strtotime($editTask['due_date'])) : ''; ?>" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Related To</label>
-                    <select name="related_to" id="related_to" onchange="updateRelatedOptions()" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <option value="">-- None --</option>
-                        <option value="contact" <?php echo ($editTask['related_to'] ?? '') === 'contact' ? 'selected' : ''; ?>>Contact</option>
-                        <option value="lead" <?php echo ($editTask['related_to'] ?? '') === 'lead' ? 'selected' : ''; ?>>Lead</option>
-                        <option value="deal" <?php echo ($editTask['related_to'] ?? '') === 'deal' ? 'selected' : ''; ?>>Deal</option>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Related To</label>
+                        <select name="related_to" id="related_to" onchange="updateRelatedOptions()" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <option value="">-- None --</option>
+                            <option value="contact" <?php echo ($editTask['related_to'] ?? '') === 'contact' ? 'selected' : ''; ?>>Contact</option>
+                            <option value="lead" <?php echo ($editTask['related_to'] ?? '') === 'lead' ? 'selected' : ''; ?>>Lead</option>
+                            <option value="deal" <?php echo ($editTask['related_to'] ?? '') === 'deal' ? 'selected' : ''; ?>>Deal</option>
+                        </select>
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Related Record</label>
-                    <select name="related_id" id="related_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <option value="">-- Select --</option>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Related Record</label>
+                        <select name="related_id" id="related_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <option value="">-- Select --</option>
+                        </select>
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Project</label>
-                    <select name="project_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <option value="">-- None --</option>
-                        <?php foreach ($projects as $project): ?>
-                        <option value="<?php echo $project['id']; ?>" <?php echo (($editTask['project_id'] ?? $_GET['project_id'] ?? '') == $project['id']) ? 'selected' : ''; ?>><?php echo sanitize($project['title']); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Project</label>
+                        <select name="project_id" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <option value="">-- None --</option>
+                            <?php foreach ($projects as $project): ?>
+                                <option value="<?php echo $project['id']; ?>" <?php echo (($editTask['project_id'] ?? $_GET['project_id'] ?? '') == $project['id']) ? 'selected' : ''; ?>><?php echo sanitize($project['title']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Assigned To</label>
-                    <select name="assigned_to" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
-                        <?php foreach ($users as $u): ?>
-                        <option value="<?php echo $u['id']; ?>" <?php echo ($editTask['assigned_to'] ?? $userId) == $u['id'] ? 'selected' : ''; ?>><?php echo sanitize($u['name']); ?></option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Assigned To</label>
+                        <select name="assigned_to" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                            <?php foreach ($users as $u): ?>
+                                <option value="<?php echo $u['id']; ?>" <?php echo ($editTask['assigned_to'] ?? $userId) == $u['id'] ? 'selected' : ''; ?>><?php echo sanitize($u['name']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
 
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
-                    <textarea name="description" rows="4" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"><?php echo sanitize($editTask['description'] ?? ''); ?></textarea>
-                </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                        <textarea name="description" rows="4" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all"><?php echo sanitize($editTask['description'] ?? ''); ?></textarea>
+                    </div>
 
-                <div class="md:col-span-2 flex items-center gap-3">
-                    <button type="submit" class="btn-primary px-6 py-2.5 text-white rounded-lg font-medium"><?php echo $action === 'edit' ? 'Update Task' : 'Create Task'; ?></button>
-                    <a href="tasks.php" class="px-6 py-2.5 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">Cancel</a>
-                </div>
-            </form>
-        </div>
+                    <div class="md:col-span-2 flex items-center gap-3">
+                        <button type="submit" class="btn-primary px-6 py-2.5 text-white rounded-lg font-medium"><?php echo $action === 'edit' ? 'Update Task' : 'Create Task'; ?></button>
+                        <a href="tasks.php" class="px-6 py-2.5 border border-gray-200 text-gray-600 rounded-lg hover:bg-gray-50 transition-colors">Cancel</a>
+                    </div>
+                </form>
+            </div>
 
-        <script>
-        const relatedData = {
-            contact: <?php echo json_encode(array_map(fn($c) => ['id' => $c['id'], 'label' => $c['first_name'] . ' ' . $c['last_name']], $contacts)); ?>,
-            lead: <?php echo json_encode(array_map(fn($l) => ['id' => $l['id'], 'label' => $l['title']], $leads)); ?>,
-            deal: <?php echo json_encode(array_map(fn($d) => ['id' => $d['id'], 'label' => $d['title']], $deals)); ?>
-        };
-        const currentRelatedId = <?php echo $editTask['related_id'] ?? 'null'; ?>;
+            <script>
+                const relatedData = {
+                    contact: <?php echo json_encode(array_map(fn($c) => ['id' => $c['id'], 'label' => $c['first_name'] . ' ' . $c['last_name']], $contacts)); ?>,
+                    lead: <?php echo json_encode(array_map(fn($l) => ['id' => $l['id'], 'label' => $l['title']], $leads)); ?>,
+                    deal: <?php echo json_encode(array_map(fn($d) => ['id' => $d['id'], 'label' => $d['title']], $deals)); ?>
+                };
+                const currentRelatedId = <?php echo $editTask['related_id'] ?? 'null'; ?>;
 
-        function updateRelatedOptions() {
-            const type = document.getElementById('related_to').value;
-            const select = document.getElementById('related_id');
-            select.innerHTML = '<option value="">-- Select --</option>';
-            if (type && relatedData[type]) {
-                relatedData[type].forEach(item => {
-                    const option = document.createElement('option');
-                    option.value = item.id;
-                    option.textContent = item.label;
-                    if (currentRelatedId && currentRelatedId == item.id) option.selected = true;
-                    select.appendChild(option);
-                });
-            }
-        }
-        updateRelatedOptions();
-        </script>
+                function updateRelatedOptions() {
+                    const type = document.getElementById('related_to').value;
+                    const select = document.getElementById('related_id');
+                    select.innerHTML = '<option value="">-- Select --</option>';
+                    if (type && relatedData[type]) {
+                        relatedData[type].forEach(item => {
+                            const option = document.createElement('option');
+                            option.value = item.id;
+                            option.textContent = item.label;
+                            if (currentRelatedId && currentRelatedId == item.id) option.selected = true;
+                            select.appendChild(option);
+                        });
+                    }
+                }
+                updateRelatedOptions();
+            </script>
 
         <?php else: ?>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-slide-up">
-            <div class="p-4 border-b border-gray-100">
-                <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" data-search=".task-row" placeholder="Search tasks..." class="pl-10 pr-4 py-2 w-full sm:w-64 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden animate-slide-up">
+                <div class="p-4 border-b border-gray-100">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" data-search=".task-row" placeholder="Search tasks..." class="pl-10 pr-4 py-2 w-full sm:w-64 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all">
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Task</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Due Date</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Related</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Project</th>
+                                <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assigned</th>
+                                <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            <?php if (empty($tasks)): ?>
+                                <tr>
+                                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">No tasks found. <a href="tasks.php?action=add" class="text-primary-600 hover:underline">Create your first task</a>.</td>
+                                </tr>
+                            <?php else: ?>
+                                <?php foreach ($tasks as $index => $task): ?>
+                                    <tr class="task-row searchable-row hover:bg-gray-50 transition-colors table-row-animate <?php echo $task['status'] === 'completed' ? 'opacity-60' : ''; ?>" style="animation-delay: <?php echo $index * 50; ?>ms">
+                                        <td class="px-6 py-4">
+                                            <p class="font-medium text-secondary-900 <?php echo $task['status'] === 'completed' ? 'line-through' : ''; ?>"><?php echo sanitize($task['title']); ?></p>
+                                            <p class="text-xs text-gray-500"><?php echo $task['status'] === 'completed' ? 'Completed ' . formatDate($task['completed_at']) : ucwords(str_replace('_', ' ', $task['status'])); ?></p>
+                                        </td>
+                                        <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full bg-gray-100 text-gray-700"><i class="fas fa-<?php echo $task['type'] === 'call' ? 'phone' : ($task['type'] === 'email' ? 'envelope' : ($task['type'] === 'meeting' ? 'calendar' : 'check')); ?> mr-1"></i><?php echo ucwords(str_replace('_', ' ', $task['type'])); ?></span></td>
+                                        <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full <?php echo statusColor($task['priority']); ?>"><?php echo ucfirst($task['priority']); ?></span></td>
+                                        <td class="px-6 py-4 text-sm text-gray-600"><?php echo $task['due_date'] ? formatDate($task['due_date'], 'M d, Y H:i') : '-'; ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-600"><?php echo $task['related_to'] ? ucfirst($task['related_to']) . ($task['first_name'] ? ': ' . sanitize($task['first_name'] . ' ' . $task['last_name']) : '') : '-'; ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-600"><?php echo $task['project_title'] ? '<a href="projects.php?action=view&id=' . $task['project_id'] . '" class="text-primary-600 hover:underline">' . sanitize($task['project_title']) . '</a>' : '-'; ?></td>
+                                        <td class="px-6 py-4 text-sm text-gray-600"><?php echo sanitize($task['assigned_name'] ?? 'Unassigned'); ?></td>
+                                        <td class="px-6 py-4 text-right">
+                                            <div class="flex items-center justify-end gap-2">
+                                                <?php if ($task['status'] !== 'completed'): ?>
+                                                    <a href="tasks.php?complete=<?php echo $task['id']; ?>" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" data-confirm="Mark as completed?"><i class="fas fa-check"></i></a>
+                                                <?php endif; ?>
+                                                <a href="tasks.php?action=edit&id=<?php echo $task['id']; ?>" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><i class="fas fa-edit"></i></a>
+                                                <a href="tasks.php?delete=<?php echo $task['id']; ?>" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" data-confirm="Are you sure you want to delete this task?"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Task</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Type</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Priority</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Due Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Related</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Project</th>
-                            <th class="px-6 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Assigned</th>
-                            <th class="px-6 py-3 text-right text-xs font-semibold text-gray-500 uppercase tracking-wider">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        <?php if (empty($tasks)): ?>
-                            <tr><td colspan="8" class="px-6 py-12 text-center text-gray-500">No tasks found. <a href="tasks.php?action=add" class="text-primary-600 hover:underline">Create your first task</a>.</td></tr>
-                        <?php else: ?>
-                            <?php foreach ($tasks as $index => $task): ?>
-                            <tr class="task-row searchable-row hover:bg-gray-50 transition-colors table-row-animate <?php echo $task['status'] === 'completed' ? 'opacity-60' : ''; ?>" style="animation-delay: <?php echo $index * 50; ?>ms">
-                                <td class="px-6 py-4">
-                                    <p class="font-medium text-secondary-900 <?php echo $task['status'] === 'completed' ? 'line-through' : ''; ?>"><?php echo sanitize($task['title']); ?></p>
-                                    <p class="text-xs text-gray-500"><?php echo $task['status'] === 'completed' ? 'Completed ' . formatDate($task['completed_at']) : ucwords(str_replace('_', ' ', $task['status'])); ?></p>
-                                </td>
-                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full bg-gray-100 text-gray-700"><i class="fas fa-<?php echo $task['type'] === 'call' ? 'phone' : ($task['type'] === 'email' ? 'envelope' : ($task['type'] === 'meeting' ? 'calendar' : 'check')); ?> mr-1"></i><?php echo ucwords(str_replace('_', ' ', $task['type'])); ?></span></td>
-                                <td class="px-6 py-4"><span class="px-2.5 py-1 text-xs rounded-full <?php echo statusColor($task['priority']); ?>"><?php echo ucfirst($task['priority']); ?></span></td>
-                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo $task['due_date'] ? formatDate($task['due_date'], 'M d, Y H:i') : '-'; ?></td>
-                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo $task['related_to'] ? ucfirst($task['related_to']) . ($task['first_name'] ? ': ' . sanitize($task['first_name'] . ' ' . $task['last_name']) : '') : '-'; ?></td>
-                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo $task['project_title'] ? '<a href="projects.php?action=view&id=' . $task['project_id'] . '" class="text-primary-600 hover:underline">' . sanitize($task['project_title']) . '</a>' : '-'; ?></td>
-                                <td class="px-6 py-4 text-sm text-gray-600"><?php echo sanitize($task['assigned_name'] ?? 'Unassigned'); ?></td>
-                                <td class="px-6 py-4 text-right">
-                                    <div class="flex items-center justify-end gap-2">
-                                        <?php if ($task['status'] !== 'completed'): ?>
-                                        <a href="tasks.php?complete=<?php echo $task['id']; ?>" class="p-2 text-green-600 hover:bg-green-50 rounded-lg transition-colors" data-confirm="Mark as completed?"><i class="fas fa-check"></i></a>
-                                        <?php endif; ?>
-                                        <a href="tasks.php?action=edit&id=<?php echo $task['id']; ?>" class="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><i class="fas fa-edit"></i></a>
-                                        <a href="tasks.php?delete=<?php echo $task['id']; ?>" class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors" data-confirm="Are you sure you want to delete this task?"><i class="fas fa-trash"></i></a>
-                                    </div>
-                                </td>
-                            </tr>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
         <?php endif; ?>
     </main>
 </div>
 
 <script>
-// Prevent duplicate form submissions by disabling submit buttons on click
-document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', function() {
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-        }
+    // Prevent duplicate form submissions by disabling submit buttons on click
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function() {
+            const submitBtn = form.querySelector('button[type="submit"]');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        });
     });
-});
 </script>
 
 <?php include 'includes/footer.php'; ?>

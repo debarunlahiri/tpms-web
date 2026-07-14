@@ -1,4 +1,5 @@
 <?php
+
 /**
  * TPMS - Database Configuration
  * Loads credentials from .env file
@@ -7,7 +8,8 @@
 /**
  * Load environment variables from .env file
  */
-function loadEnv($file) {
+function loadEnv($file)
+{
     if (!file_exists($file)) return;
     $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
     foreach ($lines as $line) {
@@ -35,7 +37,8 @@ if (!defined('DB_NAME')) define('DB_NAME', 'tpms');
  * Get PDO database connection
  * @return PDO
  */
-function getDB() {
+function getDB()
+{
     static $pdo = null;
     if ($pdo === null) {
         try {
